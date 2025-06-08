@@ -85,7 +85,7 @@ public class KonfirmasiPesananPanel extends JPanel {
         konfirmasiBtn.setBackground(new Color(0, 255, 136));
         konfirmasiBtn.setForeground(Color.BLACK);
         konfirmasiBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        konfirmasiBtn.addActionListener(_ -> konfirmasiPesanan());
+        konfirmasiBtn.addActionListener(e -> konfirmasiPesanan());
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnPanel.setBackground(new Color(30, 30, 47));

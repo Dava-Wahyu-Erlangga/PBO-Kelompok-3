@@ -93,7 +93,7 @@ public class BarangAdmin extends JPanel {
         tambahBtn.setFocusPainted(false);
         tambahBtn.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 136).darker(), 2));
         tambahBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        tambahBtn.addActionListener(_ -> tampilkanFormTambah());
+        tambahBtn.addActionListener(e -> tampilkanFormTambah());
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.setBackground(new Color(30, 30, 47));
@@ -225,7 +225,7 @@ public class BarangAdmin extends JPanel {
         browseBtn.setFocusPainted(false);
         browseBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         browseBtn.setPreferredSize(new Dimension(80, 40));
-        browseBtn.addActionListener(_ -> {
+        browseBtn.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser("src/rental/");
             int result = chooser.showOpenDialog(dialog);
             if (result == JFileChooser.APPROVE_OPTION) {

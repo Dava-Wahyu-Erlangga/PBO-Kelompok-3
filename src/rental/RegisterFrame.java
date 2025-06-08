@@ -126,30 +126,25 @@ public class RegisterFrame extends JFrame {
             return;
         }
 
-        try (Connection conn = KoneksiDatabase.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-            "INSERT INTO user (nama, username, password, alamat, noTelp) VALUES (?, ?, ?, ?, ?)")) {
-            stmt.setString(1, nama);
-            stmt.setString(2, username);
-            stmt.setString(3, password);
-            stmt.setString(4, alamat);
-            stmt.setString(5, noTelp);
+        User newUser = new User(nama, username, password, alamat, noTelp);
+        RegisterHandler handler = new RegisterHandler();
 
-            int inserted = stmt.executeUpdate();
-            if (inserted > 0) {
+        try {
+            boolean success = handler.register(newUser);
+            if (success) {
                 JOptionPane.showMessageDialog(this, "Pendaftaran berhasil! Silakan login.");
                 new LoginFrame();
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Pendaftaran gagal.");
             }
-
-        } catch (SQLIntegrityConstraintViolationException ex) {
+        } catch (SQLIntegrityConstraintViolationException e) {
             JOptionPane.showMessageDialog(this, "Username sudah digunakan.");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Kesalahan koneksi database.");
         }
     }
+
 }
 

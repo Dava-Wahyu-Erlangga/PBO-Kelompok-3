@@ -3,6 +3,8 @@ package rental;
 import java.awt.*;
 import java.sql.*;
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginFrame extends JFrame {
     private JTextField emailField;
@@ -51,6 +53,15 @@ public class LoginFrame extends JFrame {
         forgotPass.setBounds(60, 195, 150, 20);
         leftPanel.add(forgotPass);
 
+        forgotPass.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        forgotPass.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new ForgotPasswordFrame();
+            }
+        });
+
+
         JButton signUpBtn = new JButton("Sign Up");
         signUpBtn.setBounds(60, 220, 120, 35);
         signUpBtn.setBackground(Color.decode("#80FF00"));
@@ -66,38 +77,33 @@ public class LoginFrame extends JFrame {
         leftPanel.add(loginBtn);
 
         loginBtn.addActionListener(e -> {
-            String username = emailField.getText();
-            String password = new String(passwordField.getPassword());
+        String username = emailField.getText();
+        String password = new String(passwordField.getPassword());
 
-            try (Connection conn = KoneksiDatabase.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE username = ? AND password = ?")) {
+        Authenticator auth = new Authenticator();
+        try {
+            User user = auth.login(username, password);
+            if (user != null) {
+                JOptionPane.showMessageDialog(null, "Login Berhasil sebagai " + user.getRole());
 
-                stmt.setString(1, username);
-                stmt.setString(2, password);
-
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        String role = rs.getString("role");
-                        int idUser = rs.getInt("idUser");
-
-                        JOptionPane.showMessageDialog(null, "Login Berhasil sebagai " + role);
-
-                        if (role.equals("admin")) {
-                            new AdminDashboard();
-                        } else {
-                            new DashboardFrame(idUser);
-                        }
-                        dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Username atau Password salah!");
-                    }
+                UserRoleHandler handler;
+                if (user.getRole().equalsIgnoreCase("admin")) {
+                    handler = new AdminHandler();
+                } else {
+                    handler = new CustomerHandler();
                 }
 
-            } catch (SQLException | NullPointerException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Koneksi ke database gagal!");
+                handler.openDashboard(user);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Username atau Password salah!");
             }
-        });
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Koneksi ke database gagal!");
+        }
+    });
+
 
         signUpBtn.addActionListener(e -> {
             new RegisterFrame();

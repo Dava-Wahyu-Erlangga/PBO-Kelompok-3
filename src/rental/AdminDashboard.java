@@ -33,7 +33,7 @@ public class AdminDashboard extends JFrame {
         logoutBtn.setFocusPainted(false);
         logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoutBtn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
-        logoutBtn.addActionListener(_ -> System.exit(0));
+        logoutBtn.addActionListener(e -> System.exit(0));
 
         header.add(title, BorderLayout.WEST);
         header.add(logoutBtn, BorderLayout.EAST);
@@ -54,9 +54,9 @@ public class AdminDashboard extends JFrame {
         for (String item : menuItems) {
             JButton btn = createSidebarButton(item);
             switch (item) {
-                case "Dashboard" -> btn.addActionListener(_ -> showCompanyProfile());
-                case "Kelola Data Barang" -> btn.addActionListener(_ -> showBarangAdmin());
-                case "Konfirmasi Pesanan" -> btn.addActionListener(_ -> showKonfirmasiPesananPanel());
+                case "Dashboard" -> btn.addActionListener(e -> showCompanyProfile());
+                case "Kelola Data Barang" -> btn.addActionListener(e -> showBarangAdmin());
+                case "Konfirmasi Pesanan" -> btn.addActionListener(e -> showKonfirmasiPesananPanel());
             }
             sidebar.add(Box.createVerticalStrut(15));
             sidebar.add(btn);
