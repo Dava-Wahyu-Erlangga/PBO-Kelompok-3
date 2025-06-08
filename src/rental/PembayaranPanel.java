@@ -120,6 +120,16 @@ public class PembayaranPanel extends BaseFormPanel {
 
         // Aksi tombol konfirmasi pembayaran
         btnKonfirmasi.addActionListener(e -> {
+            // Validasi: semua field harus diisi
+            if (tfNoRek.getText().trim().isEmpty() ||
+                    tfNamaPemilik.getText().trim().isEmpty() ||
+                    cbMetode.getSelectedItem() == null ||
+                    dateSpinner.getValue() == null) {
+                JOptionPane.showMessageDialog(this, "Isi semua form sebelum melanjutkan!", "Gagal",
+                        JOptionPane.ERROR_MESSAGE);
+                return; // Hentikan proses jika ada yang kosong
+            }
+
             try (Connection conn = KoneksiDatabase.getConnection()) {
                 // 1. Simpan pesanan ke database
                 String sql = "INSERT INTO pesanan (idUser, idBarang, durasiSewa, totalHarga, status, jumlahUnit) VALUES (?, ?, ?, ?, ?, ?)";
